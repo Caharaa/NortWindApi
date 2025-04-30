@@ -4,7 +4,7 @@ public class Products{
     [Key]
     public double ProductID { get; set; }
     [Required,StringLength(100)]
-    public string ProductName { get; set; }
+    public string? ProductName { get; set; }
     public double CategoryID {get;set;}
 
     public  double UnitsInStock { get; set; }

@@ -8,7 +8,7 @@ public class OrdersDetails
     public double UnitPrice { get; set; }
     public double Quantity { get; set; }
     public double Discount { get; set; }
-    public Orders Orders { get; set; }
+    public Orders? Orders { get; set; }
 
 
 }

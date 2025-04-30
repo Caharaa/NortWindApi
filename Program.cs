@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NorthwindAPI.Data;
+using NorthwindAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +10,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register controllers
 builder.Services.AddControllers();
+builder.Services.AddScoped<ISaleOverviewService, SaleOverviewService>();
 
 // Register CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // Allow React app running on localhost:3000
+        policy.WithOrigins("http://localhost:3000") // Allow React app running on localhost:3000(developer)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -27,7 +29,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,7 +37,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Use CORS middleware
 app.UseCors("AllowReactApp");
 
 // Map controllers
