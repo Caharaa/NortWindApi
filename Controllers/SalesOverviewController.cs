@@ -19,9 +19,9 @@ public class SalesOverviewController : ControllerBase
         _saleOverviewService = saleOverviewService;
     }
     [HttpGet("Total Sales")]
-    public async Task<ActionResult> GetTotalSale()
+    public async Task<ActionResult> GetTotalSale(string dateGroup)
     {
-        var result = await _saleOverviewService.GetTotalSaleService();
+        var result = await _saleOverviewService.GetTotalSaleService(dateGroup);
         return Ok(result);
     }
     [HttpGet("Avg Order")]

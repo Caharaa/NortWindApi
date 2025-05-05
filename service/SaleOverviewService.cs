@@ -15,9 +15,9 @@ namespace NorthwindAPI.Services
             _context = context;
 
         }
-        public async Task<List<TotalSaleDto>> GetTotalSaleService()
+        public async Task<List<TotalSaleDto>> GetTotalSaleService(string groupByPart)
         {
-            var result = await (
+            /*var query = await (
                 from order in _context.Orders
                 join detail in _context.OrdersDetails on order.OrderID equals detail.OrderID
                 group new { order, detail } by order.OrderDate.Value.Year   into g
@@ -25,12 +25,48 @@ namespace NorthwindAPI.Services
                 select new TotalSaleDto
                 {
                     SaleDate = g.Key,
-                    SaleOverview = Math.Round(g.Sum(x => x.detail.UnitPrice * x.detail.Quantity * (1 - (double)x.detail.Discount)))
+                    SaleOverview = Math.Round(g.Sum(x => x.detail.UnitPrice * x.detail.Quantity * (1 - x.detail.Discount)))
                 }
 
-            ).ToListAsync();
+            ).ToListAsync();*/
+            var query = from order in _context.Orders
+                        join detail in _context.OrdersDetails
+                            on order.OrderID equals detail.OrderID
+                        where order.OrderDate.HasValue
+                        select new
+                        {
+                            OrderDate = order.OrderDate.Value,
+                            detail.UnitPrice,
+                            detail.Quantity,
+                            detail.Discount
+                        };
 
-            return result;
+            var groupedQuery = groupByPart switch
+            {
+                "Year" => query
+                    .GroupBy(x => x.OrderDate.Year)
+                    .Select(g => new TotalSaleDto
+                    {
+                        salerDate = g.Key,
+                        saleOverview = Math.Round(
+                            g.Sum(x => x.UnitPrice * x.Quantity * (1 - x.Discount))
+                        )
+                    }).OrderByDescending(g => g.saleOverview),
+
+                "Month" => query
+                    .GroupBy(x => x.OrderDate.Month)
+                    .Select(g => new TotalSaleDto
+                    {
+                        salerDate = g.Key,
+                        saleOverview = Math.Round(
+                            g.Sum(x => x.UnitPrice * x.Quantity * (1 - x.Discount))
+                        )
+                    }).OrderByDescending(g => g.saleOverview),
+
+                _ => throw new ArgumentException("Invalid groupByPart: use 'Year', 'Month', or 'Day'")
+            };
+            return  await groupedQuery.ToListAsync();
+
         }
         public async Task<List<AvgOrderperProductDto>> GetAvgOrderValuePerProductService()
         {
@@ -64,7 +100,7 @@ namespace NorthwindAPI.Services
 
             return result;
         }
-        public async Task<List<ReportDto>> GetReportsService(DateTime startDate,DateTime endDate)
+        public async Task<List<ReportDto>> GetReportsService(DateTime startDate, DateTime endDate)
         {
             var result = await (
                 from order in _context.Orders
