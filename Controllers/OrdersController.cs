@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NorthwindAPI.Data;
 using NorthwindAPI.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class OrdersController : ControllerBase{
@@ -15,7 +15,9 @@ public class OrdersController : ControllerBase{
         _context = context;
     }
     [HttpGet("Orderlist")]
-    public async Task<ActionResult<IEnumerable<Orders>>> GetOrderList(){
-        return await _context.Orders.ToListAsync();
-}
+    public async Task<ActionResult<List<Orders>>> GetOrderList()
+    {
+        var result = await _context.Orders.ToListAsync();
+        return Ok(result);
+    }
 }

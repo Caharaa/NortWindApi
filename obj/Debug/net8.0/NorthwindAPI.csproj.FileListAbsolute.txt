@@ -168,3 +168,4 @@ D:\c sharp\NorthwindAPI\obj\Debug\net8.0\refint\NorthwindAPI.dll
 D:\c sharp\NorthwindAPI\obj\Debug\net8.0\NorthwindAPI.pdb
 D:\c sharp\NorthwindAPI\obj\Debug\net8.0\NorthwindAPI.genruntimeconfig.cache
 D:\c sharp\NorthwindAPI\obj\Debug\net8.0\ref\NorthwindAPI.dll
+D:\c sharp\NorthwindAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using NorthwindAPI.Data;
-using System;
-using NorthwindAPI.Models;
 using NorthwindAPI.Services;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 

@@ -17,18 +17,6 @@ namespace NorthwindAPI.Services
         }
         public async Task<List<TotalSaleDto>> GetTotalSaleService(string groupByPart)
         {
-            /*var query = await (
-                from order in _context.Orders
-                join detail in _context.OrdersDetails on order.OrderID equals detail.OrderID
-                group new { order, detail } by order.OrderDate.Value.Year   into g
-                orderby g.Key
-                select new TotalSaleDto
-                {
-                    SaleDate = g.Key,
-                    SaleOverview = Math.Round(g.Sum(x => x.detail.UnitPrice * x.detail.Quantity * (1 - x.detail.Discount)))
-                }
-
-            ).ToListAsync();*/
             var query = from order in _context.Orders
                         join detail in _context.OrdersDetails
                             on order.OrderID equals detail.OrderID
